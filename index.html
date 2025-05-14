@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>点绿呈精</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            border: none;
+            border-radius: 0;
+            background-color: #e8f5e9;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        .title {
+            font-size: 24px;
+        }
+        .content {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            overflow: hidden;
+        }
+        .image-container {
+            position: relative;
+            width: 60%;
+            background-color: #f0f5ff;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 100%;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .info-box {
+            position: absolute;
+            display: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid #4caf50;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            font-weight: bold;
+            color: #2e7d32;
+            min-width: 150px;
+            text-align: center;
+        }
+        .data-container {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+        }
+        .data-box {
+            border: 1px dashed #4caf50;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+        .data-item {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #8bc34a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .button:hover {
+            background-color: #7cb342;
+        }
+        .button-container {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">logo</div>
+            <div class="title">点绿呈精</div>
+        </div>
+        <div class="content">
+            <div class="image-container" id="imageContainer">
+                <img id="displayImage" src="nohole.png" alt="叶片图片/光谱图片">
+                <div class="info-box" id="infoBox">
+                    <p style="margin: 0; font-size: 14px;">测量点信息</p>
+                    <p style="margin: 5px 0; font-size: 16px;">叶绿素含量：</p>
+                    <p style="margin: 0; font-size: 18px; color: #1b5e20;" id="pointValue"></p>
+                </div>
+            </div>
+            <div class="data-container">
+                <div class="data-box" id="normalData">
+                    <div class="data-item">叶片基本信息：</div>
+                    <div class="data-item" style="margin: 10px 0;">叶绿素含量: 42.5 μg/cm²</div>
+                    <div class="data-item" style="margin: 10px 0;">叶片氮含量: 289 μg/cm²</div>
+                    <div class="data-item" style="margin: 10px 0;">叶片温度: 26.2°C</div>
+                    <div class="data-item" style="margin: 10px 0;">叶片湿度(RWC): 88.7%</div>
+                </div>
+
+                <div class="data-box" id="chloroData" style="display: none;">
+                    <div class="data-item">叶绿素含量数据：</div>
+                    <div class="data-item" style="font-size: 0.9em;">
+                        打孔图片中包含10个测量点，<br>
+                        悬浮在打孔图片上可查看各点叶绿素含量
+                    </div>
+                    <div class="data-item">平均叶绿素含量：<br>0.147394</div>
+                    <div class="data-item">最高值：0.258357</div>
+                    <div class="data-item">最低值：0.012753</div>
+                </div>
+                <div class="button-container">
+                    <button class="button" id="analyzeBtn">光谱分析</button>
+                    <button class="button" id="switchBtn">切换到打孔/未打孔图片</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imageContainer = document.getElementById('imageContainer');
+        const displayImage = document.getElementById('displayImage');
+        const infoBox = document.getElementById('infoBox');
+        const pointValue = document.getElementById('pointValue');
+        const switchBtn = document.getElementById('switchBtn');
+        const normalData = document.getElementById('normalData');
+        const chloroData = document.getElementById('chloroData');
+
+        // 叶绿素含量数据（打孔的图片）
+        const chlorophyllData = [
+            0.188613,
+            0.088506,
+            0.161796,
+            0.226107,
+            0.258357,
+            0.183468,
+            0.189189,
+            0.119574,
+            0.045579,
+            0.012753
+        ];
+
+        // 图片切换功能
+        let isFirstImage = true;
+        let showingSpectrum = false;
+        
+        switchBtn.addEventListener('click', function() {
+            if (showingSpectrum) {
+                // 如果正在显示光谱图，则切换回原来的图片状态
+                showingSpectrum = false;
+                if (isFirstImage) {
+                    displayImage.src = 'nohole.png';
+                    normalData.style.display = 'block';
+                    chloroData.style.display = 'none';
+                } else {
+                    displayImage.src = 'hole.png';
+                    normalData.style.display = 'none';
+                    chloroData.style.display = 'block';
+                }
+            } else {
+                // 正常切换打孔/未打孔图片
+                if (isFirstImage) {
+                    displayImage.src = 'hole.png'; // 切换到打孔的叶片图片
+                    normalData.style.display = 'none';
+                    chloroData.style.display = 'block';
+                } else {
+                    displayImage.src = 'nohole.png'; // 切换回没打孔的叶片图片
+                    normalData.style.display = 'block';
+                    chloroData.style.display = 'none';
+                }
+                isFirstImage = !isFirstImage;
+            }
+        });
+
+        // 定义打孔位置（根据提供的图片调整）
+        const holePositions = [
+            { x: 0.60, y: 0.25 },  // 第1个孔位置 (4-1)
+            { x: 0.68, y: 0.35 },  // 第2个孔位置 (4-2)
+            { x: 0.68, y: 0.39 },  // 第3个孔位置 (4-3)
+            { x: 0.68, y: 0.48 },  // 第4个孔位置 (4-4)
+            { x: 0.61, y: 0.69 },  // 第5个孔位置 (4-5)
+            { x: 0.37, y: 0.33 },  // 第6个孔位置 (4-6)
+            { x: 0.40, y: 0.46 },  // 第7个孔位置 (4-7)
+            { x: 0.22, y: 0.58 },  // 第8个孔位置 (4-8)
+            { x: 0.28, y: 0.62 },  // 第9个孔位置 (4-9)
+            { x: 0.30, y: 0.69 },  // 第10个孔位置 (4-10)
+        ];
+
+        // 悬浮显示信息功能
+        imageContainer.addEventListener('mousemove', function(e) {
+            if (!isFirstImage && !showingSpectrum) { // 只在打孔的图片上显示信息框
+                const imageWidth = displayImage.offsetWidth;
+                const imageHeight = displayImage.offsetHeight;
+
+                // 计算鼠标相对位置
+                const xRatio = e.offsetX / imageWidth;
+                const yRatio = e.offsetY / imageHeight;
+
+                // 找到最近的孔位置
+                let closestIndex = 0;
+                let minDistance = 1;
+
+                for (let i = 0; i < holePositions.length; i++) {
+                    const hole = holePositions[i];
+                    const distance = Math.sqrt(
+                        Math.pow(xRatio - hole.x, 2) +
+                        Math.pow(yRatio - hole.y, 2)
+                    );
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestIndex = i;
+                    }
+                }
+
+                // 只有当鼠标足够接近孔时才显示信息
+                if (minDistance < 0.1) {
+                    infoBox.style.display = 'block';
+                    infoBox.style.left = e.offsetX + 20 + 'px';
+                    infoBox.style.top = e.offsetY + 20 + 'px';
+                    pointValue.textContent = chlorophyllData[closestIndex];
+                } else {
+                    infoBox.style.display = 'none';
+                }
+            }
+        });
+
+        imageContainer.addEventListener('mouseleave', function() {
+            infoBox.style.display = 'none';
+        });
+
+        // 光谱分析按钮功能
+        document.getElementById('analyzeBtn').addEventListener('click', function() {
+            displayImage.src = 'guangpu.jpg'; // 切换到光谱图
+            showingSpectrum = true;
+            infoBox.style.display = 'none'; // 隐藏信息框
+            // 显示未打孔图片的数据
+            normalData.style.display = 'block';
+            chloroData.style.display = 'none';
+        });
+
+        // 初始状态设置
+        window.addEventListener('load', function() {
+            // 初始图片是nohole.png，显示基本信息数据
+            normalData.style.display = 'block';
+            chloroData.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
