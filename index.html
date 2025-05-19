@@ -216,10 +216,6 @@
 
                 <div class="data-box" id="chloroData" style="display: none;">
                     <div class="data-item">叶绿素含量数据：</div>
-                    <div class="data-item" style="font-size: 0.9em;">
-                        打孔图片中包含10个测量点，<br>
-                        悬浮在打孔图片上可查看各点叶绿素含量
-                    </div>
                     <div class="data-item">平均叶绿素含量：<br>0.147394</div>
                     <div class="data-item">最高值：0.258357</div>
                     <div class="data-item">最低值：0.012753</div>
@@ -346,7 +342,7 @@
 
         // 光谱分析按钮功能
         document.getElementById('analyzeBtn').addEventListener('click', function() {
-            displayImage.src = 'guangpu.jpg'; // 切换到光谱图
+            displayImage.src = '方光.jpg'; // 切换到光谱图
             showingSpectrum = true;
             infoBox.style.display = 'none'; // 隐藏信息框
             // 显示未打孔图片的数据
