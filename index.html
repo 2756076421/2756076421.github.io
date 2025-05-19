@@ -11,9 +11,11 @@
             padding: 0;
             height: 100vh;
             overflow: hidden;
+             /* 电脑上的基础字体大小，可以根据需要调整 */
+            font-size: 18px; 
         }
         .container {
-            width: 100%;
+            width: 100%; /* 恢复全屏宽度 */
             height: 100%;
             margin: 0;
             border: none;
@@ -23,15 +25,19 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+             /* 容器内的项目拉伸填充宽度 */
+            align-items: stretch;
         }
         .header {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
+             /* 保持顶部外边距，如果需要调整对齐，再修改 */
+            margin-top: 15px; 
         }
         .logo {
-            width: 180px;
-            height: 180px;
+            width: 180px; /* 使用您设置的大尺寸 */
+            height: 180px; /* 使用您设置的大尺寸 */
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -46,25 +52,32 @@
             border-radius: 50%;
         }
         .title {
-            font-size: 54px;
+            font-size: 54px; /* 电脑上的标题字体大小 */
         }
         .content {
             display: flex;
             gap: 20px;
             flex: 1;
             overflow: hidden;
+             /* 恢复水平布局 */
+            flex-direction: row; 
         }
         .image-container {
             position: relative;
             width: 60%;
+            /* background-color: #f0f5ff; */ /* 保持无背景色 */
             border-radius: 5px;
             overflow: hidden;
             height: 100%;
+             /* 恢复默认 */
+            flex-shrink: 1; 
         }
         .image-container img {
             width: 100%;
             height: 100%;
             object-fit: contain;
+             /* 移除图片圆角 */
+            /* border-radius: 50%; */ 
         }
         .info-box {
             position: absolute;
@@ -78,11 +91,26 @@
             color: #2e7d32;
             min-width: 150px;
             text-align: center;
+             /* 电脑上 infoBox 字体大小 */
+            font-size: 40px;
         }
+         .info-box p {
+             margin: 0;
+             font-size: 1em; /* 相对于info-box的字体大小 */
+         }
+         .info-box p:nth-child(2) {
+             font-size: 1.1em;
+         }
+          .info-box p:nth-child(3) {
+             font-size: 1.2em;
+             color: #1b5e20;
+          }
         .data-container {
             width: 40%;
             display: flex;
             flex-direction: column;
+             /* 恢复默认 */
+            flex-grow: 0; 
         }
         .data-box {
             border: 1px dashed #4caf50;
@@ -91,11 +119,21 @@
             background-color: #e8f5e9;
             margin-bottom: 20px;
             flex: 1;
+             /* 恢复高度自适应 */
+            height: auto; 
         }
         .data-item {
             margin-bottom: 10px;
             text-align: center;
+             /* 电脑上数据项字体大小 */
+            font-size: 48px;
         }
+        .data-item div {
+            font-size: 0.9em; /* 恢复原始相对大小 */
+        }
+         .data-box .data-item:first-child {
+             font-size: 54px; /* 电脑上数据框标题字体大小 */
+         }
         .button {
             display: block;
             width: 100%;
@@ -106,6 +144,7 @@
             border-radius: 5px;
             text-align: center;
             cursor: pointer;
+             /* 电脑上按钮字体大小 */
             font-size: 56px;
             margin-bottom: 10px;
         }
@@ -115,6 +154,38 @@
         .button-container {
             margin-top: auto;
         }
+
+        /* 媒体查询 - 针对小屏幕 (手机) */
+        @media (max-width: 767px) {
+             body {
+                 font-size: 14px; /* 手机上的基础字体大小 */
+             }
+            .title {
+                font-size: 24px; /* 手机上的标题字体大小 */
+            }
+            .button {
+                font-size: 16px; /* 手机上的按钮字体大小 */
+            }
+            .info-box {
+                font-size: 14px; /* 手机上 infoBox 字体大小 */
+            }
+             .info-box p:nth-child(2) {
+                 font-size: 1.1em;
+            }
+             .info-box p:nth-child(3) {
+                 font-size: 1.2em;
+             }
+            .data-item {
+                font-size: 16px; /* 手机上数据项字体大小 */
+            }
+            .data-item div {
+                 font-size: 0.9em !important; /* 确保相对大小生效 */
+            }
+             .data-box .data-item:first-child {
+                 font-size: 18px; /* 手机上数据框标题稍大 */
+             }
+        }
+
     </style>
 </head>
 <body>
@@ -129,29 +200,29 @@
             <div class="image-container" id="imageContainer">
                 <img id="displayImage" src="nohole.png" alt="叶片图片/光谱图片">
                 <div class="info-box" id="infoBox">
-                    <p style="margin: 0; font-size: 44px;">测量点信息</p>
-                    <p style="margin: 5px 0; font-size: 46px;">叶绿素含量：</p>
-                    <p style="margin: 0; font-size: 48px; color: #1b5e20;" id="pointValue"></p>
+                    <p>测量点信息</p>
+                    <p>叶绿素含量：</p>
+                    <p id="pointValue"></p>
                 </div>
             </div>
             <div class="data-container">
                 <div class="data-box" id="normalData">
-                    <div class="data-item" style="font-size: 48px;">叶片基本信息：</div>
-                    <div class="data-item" style="margin: 10px 0;font-size: 48px">叶绿素含量: 42.5 μg/cm²</div>
-                    <div class="data-item" style="margin: 10px 0;font-size: 48px">叶片氮含量: 289 μg/cm²</div>
-                    <div class="data-item" style="margin: 10px 0;font-size: 48px">叶片温度: 26.2°C</div>
-                    <div class="data-item" style="margin: 10px 0;font-size: 48px">叶片湿度(RWC): 88.7%</div>
+                    <div class="data-item">叶片基本信息：</div>
+                    <div class="data-item" style="margin: 10px 0;">叶绿素含量: 42.5 μg/cm²</div>
+                    <div class="data-item" style="margin: 10px 0;">叶片氮含量: 289 μg/cm²</div>
+                    <div class="data-item" style="margin: 10px 0;">叶片温度: 26.2°C</div>
+                    <div class="data-item" style="margin: 10px 0;">叶片湿度(RWC): 88.7%</div>
                 </div>
 
                 <div class="data-box" id="chloroData" style="display: none;">
-                    <div class="data-item" style="font-size: 48px;">叶绿素含量数据：</div>
-                    <div class="data-item" style="font-size: 48px;">
+                    <div class="data-item">叶绿素含量数据：</div>
+                    <div class="data-item" style="font-size: 0.9em;">
                         打孔图片中包含10个测量点，<br>
                         悬浮在打孔图片上可查看各点叶绿素含量
                     </div>
-                    <div class="data-item" style="font-size: 48px;">平均叶绿素含量：<br>0.147394</div>
-                    <div class="data-item" style="font-size: 48px;">最高值：0.258357</div>
-                    <div class="data-item" style="font-size: 48px;">最低值：0.012753</div>
+                    <div class="data-item">平均叶绿素含量：<br>0.147394</div>
+                    <div class="data-item">最高值：0.258357</div>
+                    <div class="data-item">最低值：0.012753</div>
                 </div>
                 <div class="button-container">
                     <button class="button" id="analyzeBtn">光谱分析</button>
@@ -275,7 +346,7 @@
 
         // 光谱分析按钮功能
         document.getElementById('analyzeBtn').addEventListener('click', function() {
-            displayImage.src = '方光.jpg'; // 切换到光谱图
+            displayImage.src = 'guangpu.jpg'; // 切换到光谱图
             showingSpectrum = true;
             infoBox.style.display = 'none'; // 隐藏信息框
             // 显示未打孔图片的数据
