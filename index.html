@@ -216,9 +216,10 @@
 
                 <div class="data-box" id="chloroData" style="display: none;">
                     <div class="data-item">叶绿素含量数据：</div>
-                    <div class="data-item">平均叶绿素含量：<br>0.147394</div>
-                    <div class="data-item">最高值：0.258357</div>
-                    <div class="data-item">最低值：0.012753</div>
+                   
+                    <div class="data-item">平均叶绿素含量：<br>0.147394 μg/cm²</div>
+                    <div class="data-item">最高值：0.258357 μg/cm²</div>
+                    <div class="data-item">最低值：0.012753 μg/cm²</div>
                 </div>
                 <div class="button-container">
                     <button class="button" id="analyzeBtn">光谱分析</button>
@@ -239,16 +240,16 @@
 
         // 叶绿素含量数据（打孔的图片）
         const chlorophyllData = [
-            0.188613,
-            0.088506,
-            0.161796,
-            0.226107,
-            0.258357,
-            0.183468,
-            0.189189,
-            0.119574,
-            0.045579,
-            0.012753
+            3.779238681, 
+            1.773394722, 
+            3.241906452, 
+            4.530505959, 
+            5.176699209, 
+            3.676148316, 
+            3.790779993, 
+            2.395904238, 
+            0.913266423, 
+            0.255531861
         ];
 
         // 图片切换功能
@@ -329,7 +330,7 @@
                     infoBox.style.display = 'block';
                     infoBox.style.left = e.offsetX + 20 + 'px';
                     infoBox.style.top = e.offsetY + 20 + 'px';
-                    pointValue.textContent = chlorophyllData[closestIndex];
+                    pointValue.textContent = chlorophyllData[closestIndex] + ' μg/cm²';
                 } else {
                     infoBox.style.display = 'none';
                 }
